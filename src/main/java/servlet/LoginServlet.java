@@ -33,7 +33,7 @@ public class LoginServlet extends HttpServlet {
         } else {
             // Đăng nhập thất bại → hiển thị lại login.jsp với lỗi
             req.setAttribute("error", "Sai username hoặc password");
-            req.getRequestDispatcher("/login.jsp").forward(req, resp);
+            req.getRequestDispatcher("/WEB-INF/view/login.jsp").forward(req, resp);
         }
     }
 
@@ -47,7 +47,7 @@ public class LoginServlet extends HttpServlet {
             resp.sendRedirect(req.getContextPath() + "/home");
         } else {
             // Nếu chưa login → hiển thị form
-            req.getRequestDispatcher("/login.jsp").forward(req, resp);
+            req.getRequestDispatcher("WEB-INF/view/login.jsp").forward(req, resp);
         }
     }
 }
