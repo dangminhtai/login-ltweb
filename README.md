@@ -145,4 +145,69 @@ demo-servlet/
 
 ⚠️ **Port Tomcat**: Mặc định là 8080, nếu bạn dùng port khác (ví dụ 8081), cần cập nhật URL truy cập.
 
-> Note: Chúc bạn chạy thành công! 
+> Note: Chúc bạn chạy thành công!
+
+---
+
+## 7. Quản lý sản phẩm (Product CRUD)
+
+### 7.1. Các route chính
+- GET `/products` → Danh sách sản phẩm
+- GET `/products/create` → Form tạo sản phẩm
+- POST `/products/create` → Lưu sản phẩm mới
+- GET `/products/edit?id=...` → Form sửa sản phẩm
+- POST `/products/edit` → Cập nhật sản phẩm
+- POST `/products/delete` → Xóa sản phẩm
+
+Tất cả các route trên yêu cầu đăng nhập (kiểm tra session `user`). Từ trang Home có link "Quản lý sản phẩm" để điều hướng.
+
+### 7.2. SQL tạo bảng và dữ liệu mẫu
+Sử dụng MySQL database `ltweb` (theo `config/DBMySQLConnect.java`). Chạy các lệnh sau:
+
+```sql
+-- Tạo database nếu chưa có
+CREATE DATABASE IF NOT EXISTS ltweb;
+USE ltweb;
+
+-- Tạo bảng products
+CREATE TABLE IF NOT EXISTS products (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  price DECIMAL(10,2) NOT NULL,
+  description TEXT NULL
+);
+
+-- Dữ liệu mẫu
+INSERT INTO products (name, price, description) VALUES
+('iPhone 15 Pro', 29990000.00, 'Bản Pro, màu Titan, 256GB'),
+('Samsung Galaxy S23', 18990000.00, 'Chip Snapdragon, màn 120Hz'),
+('Xiaomi Redmi Note 12', 5990000.00, 'Pin 5000mAh, sạc nhanh'),
+('MacBook Air M2', 25990000.00, '8GB RAM, 256GB SSD'),
+('Logitech MX Master 3S', 2190000.00, 'Chuột không dây cao cấp');
+```
+
+### 7.3. Cấu trúc mã nguồn liên quan
+```
+src/main/java/
+├── dao/
+│   └── ProductDAO.java
+├── model/
+│   └── Product.java
+└── servlet/
+    ├── ProductListServlet.java     # GET /products
+    ├── ProductCreateServlet.java   # GET/POST /products/create
+    ├── ProductEditServlet.java     # GET/POST /products/edit
+    └── ProductDeleteServlet.java   # POST /products/delete
+
+src/main/webapp/WEB-INF/view/product/
+├── list.jsp    # danh sách + nút sửa/xóa
+└── form.jsp    # form tạo/sửa dùng chung
+```
+
+### 7.4. Troubleshooting
+- Lỗi `java.sql.SQLSyntaxErrorException: Table 'ltweb.products' doesn't exist`:
+  - Chưa tạo bảng `products`. Hãy chạy SQL ở mục 7.2.
+  - Kiểm tra đúng database đang dùng là `ltweb` và user/password trong `DBMySQLConnect.java`.
+- Lỗi không truy cập được `/products`:
+  - Cần đăng nhập trước tại `/login`.
+  - Đảm bảo server Tomcat đang chạy và project đã được deploy thành công.
