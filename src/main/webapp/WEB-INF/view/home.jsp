@@ -48,6 +48,13 @@
         <p><strong>ID:</strong> ${user.id}</p>
         <p><strong>Username:</strong> ${user.username}</p>
     </div>
+
+    <div style="margin-top: 24px;">
+        <h2>Chức năng</h2>
+        <p>
+            <a href="${pageContext.request.contextPath}/products">Quản lý sản phẩm</a>
+        </p>
+    </div>
 </body>
 </html>
 
